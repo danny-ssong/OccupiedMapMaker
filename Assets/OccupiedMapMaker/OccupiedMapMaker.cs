@@ -140,7 +140,8 @@ public class OccupiedMapMaker : MonoBehaviour
             {
                 for (int x = 0; x < data.GetLength(1); x++)
                 {
-                    byte pixelValue = (byte)(data[y, x] == true ? 254 : 0);
+                    //점유된 픽셀 값이 254 아닌가... 왜 반대로 해야 동작하지..
+                    byte pixelValue = (byte)(data[y, x] == true ? 0 : 254);
                     imageData.WriteByte(pixelValue);
                 }
             }
@@ -170,7 +171,7 @@ public class OccupiedMapMaker : MonoBehaviour
             {
                 writer.WriteLine("image: "  + filename + ".pgm");
                 writer.WriteLine("resolution: " + resolution);
-                writer.WriteLine("origin:" + $"[{-width / 2}, {-height / 2}, 0 ]");
+                writer.WriteLine("origin: " + $"[{-width / 2}, {-height / 2}, 0 ]");
                 writer.WriteLine("negate: " + 0);
 
                 //thresh default value,  maybe it's OK to use occupied_thresh = 0.99, free_tresh =  0.01
