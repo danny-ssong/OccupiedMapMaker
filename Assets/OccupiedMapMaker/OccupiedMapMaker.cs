@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -61,9 +62,10 @@ public class OccupiedMapMaker : MonoBehaviour
         InitVariableSetting();
         FindOccupancyPoints();
         FindKnownPoints();
+        RemoveInnerOccupancyPoints();
 
-        
-        
+
+
 
 
 
@@ -72,6 +74,44 @@ public class OccupiedMapMaker : MonoBehaviour
         CreateYamlFile();
     }
     
+    private void RemoveInnerOccupancyPoints()
+    {
+        int rowCount = occupiedMap.GetLength(0);
+        int columnCount = occupiedMap.GetLength(1);
+
+        int[] dx = { -1, 1, 0, 0 };
+        int[] dy = { 0, 0, -1, 1 };
+
+        for (int row=0; row<rowCount; row++)
+        {
+            for(int col=0; col<columnCount; col++)
+            {
+                if(occupiedMap[row, col] == (int)PointValue.OCCUPIED)
+                {
+                    bool isFreePointNearby = false;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int newX = col + dx[i];
+                        int newY = row + dy[i];
+                        
+                        if (newX >= 0 && newX < columnCount && newY >= 0 && newY < rowCount)
+                        {
+                            if (occupiedMap[newY, newX] == (int)PointValue.FREE)
+                            {
+                                isFreePointNearby = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isFreePointNearby) occupiedMap[row, col] = (int)PointValue.UNKNOWN;
+                    
+                }
+                
+            }
+        }
+
+    }
+
     private void FindOccupancyPoints()
     {
         for (float row = 0; row < height; row += resolution)
