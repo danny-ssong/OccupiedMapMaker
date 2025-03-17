@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 enum PointValue{
-    UNKNOWN = 127,
+    UNKNOWN = 205,
     OCCUPIED = 0,
     FREE = 254
 }
@@ -238,7 +238,6 @@ public class OccupiedMapMaker : MonoBehaviour
             {
                 for (int x = 0; x < data.GetLength(1); x++)
                 {
-                    //점유된 픽셀 값이 254 아닌가... 왜 반대로 해야 동작하지..
                     byte pixelValue = (byte)(data[y, x]);
                     imageData.WriteByte(pixelValue);
                 }
